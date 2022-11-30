@@ -31,6 +31,7 @@ namespace WebApiCasino.Controllers
             dbContext.Add(premioAux);
             await dbContext.SaveChangesAsync();
             return Ok();
+            
         }
 
 

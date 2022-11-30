@@ -36,25 +36,27 @@ namespace WebApiCasino.Controllers
             var veifircarNombreRifa = await dbContext.Rifas.AnyAsync(x => x.Nombre == objRifa.Nombre);
             if (veifircarNombreRifa)
             {
-                return BadRequest("Ya existe");
+                return BadRequest("Ya existe"); //aqui entro yo como toro y la excepcion siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
             }
             var rifaAux = mapper.Map<Rifa>(objRifa);
-            rifaAux.CreationDate = DateTime.Now;
+           
             dbContext.Add(rifaAux);
             await dbContext.SaveChangesAsync();
             return Ok($"El Id de la Rifa es: {rifaAux.Id}");
+         
         }
 
         [HttpGet]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         public async Task<ActionResult<List<Rifa>>> Get()
+    
         {
             logger.LogInformation("Obteneniendo las Rifas");
             var rifas = dbContext.Rifas.ToList();
             return rifas;
         }
-
+      
         [HttpGet("{id:int}")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
@@ -157,3 +159,15 @@ namespace WebApiCasino.Controllers
 
     }
 }
+
+//⠀⠀⠀⠀⠀⠀⠀⢰⡿⠋⠁⠀⠀⠈⠉⠙⠻⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//⠀⠀⠀⠀⢀⣿⠇⠀⢀⣴⣶⡾⠿⠿⠿⢿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//⢸⣿⠀⢸⣿⡇⠀⠀⠀⠀⠀⠈⠉⠁⠀⠀⠀⣿
+//⠀⠀⣀⣀⣸⡿⠀⠀⢸⣿⣇⠀⠀⠀⠀⠀⠀⠙⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//⠀⣾⡟⠛⣿⡇⠀⠀⢸⣿⣿⣷⣤⣤⣤⣤⣶⣶⣿⠇⠀⠀⠀⠀⠀⠀
+//⢀⣿⠀⢀⣿⡇⠀⠀⠀⠻⢿⣿⣿⣿⣿⣿⠿⣿⡏⠀⠀⠀⠀
+//⢸⣿⠀⠘⣿⡇⠀⠀⠀⠀⠀⠀⠀⣠⣶⣾⣿⣿
+//⠸⣿⠀⠀⣿⡇⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⠀⠀⠀
+//⠀⠻⣷⣶⣿⣇⠀⠀⠀⢠⣼⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀
+//⠀⠀⠀⠀⢸⣿⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀
+//⠀⠀⠀⠀⢸⣿⣀⣀⣀⣼⡿⢿⣿⣿⣿⣿⣿⡿

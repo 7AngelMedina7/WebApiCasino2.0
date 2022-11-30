@@ -11,6 +11,9 @@ using System.Text.Json.Serialization;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using WebApiCasino.Utilidades;
+using WebApiCasino.Filtros;
+using API_invvideojuegos.Services;
+using WebApiCasino.Services;
 
 namespace WebApiCasino
 {
@@ -28,15 +31,27 @@ namespace WebApiCasino
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers(opciones =>
+            {
+                opciones.Filters.Add(typeof(FiltroDeExcepcion));
+            }).AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
+            services.AddTransient<IService, ServiceA>();
 
+            services.AddTransient<ServiceTransient>();
 
+            services.AddScoped<ServiceScoped>();
+            services.AddSingleton<ServiceSingleton>();
+            services.AddTransient<FiltroDeAccion>();
+            services.AddHostedService<EscribirEnArchivo>();
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+            services.AddEndpointsApiExplorer();
 
-
-            services.AddResponseCaching();
+        services.AddResponseCaching();
+            
 
             //Autenticaciones
 
@@ -51,11 +66,12 @@ namespace WebApiCasino
                         Encoding.UTF8.GetBytes(Configuration["keyjwt"])),
                     ClockSkew = TimeSpan.Zero
                 });
+
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiExamen", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiCasino", Version = "v1" });
                 //Autenticaciones
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

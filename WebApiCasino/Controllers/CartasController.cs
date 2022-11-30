@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 using WebApiCasino.Entidades;
 
 namespace WebApiCasino.Controllers
@@ -22,8 +23,9 @@ namespace WebApiCasino.Controllers
         public async Task<ActionResult<List<Carta>>> Get(Carta carta)
         {
             var cartas = dbContext.Cartas.ToList();
-
+            
             return cartas;
+
         }
     }
 }

@@ -19,6 +19,7 @@ namespace WebApiCasino.Entidades
         public string Recompensa { get; set; }
 
         public virtual ICollection<Rifa> Rifas { get; set; }
+       
 
     }
 

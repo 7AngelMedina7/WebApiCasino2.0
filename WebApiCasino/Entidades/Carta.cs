@@ -5,7 +5,7 @@ using WebApiCasino.Validaciones;
 
 namespace WebApiCasino.Entidades
 {
-    public class Carta
+    public class Carta 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,5 +13,6 @@ namespace WebApiCasino.Entidades
         [VerificarNumeroCarta]
         public int CartaId { get; set; }
         public string Nombre { get; set; }
+        
     }
 }

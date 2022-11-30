@@ -37,15 +37,16 @@ namespace WebApiCasino.Controllers
 
             var data = await userManager.FindByEmailAsync(registroDTO.Email);
 
-            if (data != null)
+            if (data != null) 
             {
                 if (registroDTO.IsAdmin == 1)
                 {
                     await userManager.AddClaimAsync(data, new Claim("EsAdmin", "1"));
                 }
-                else
+               else if(registroDTO.IsAdmin == 2)
+              
                 {
-                    await userManager.AddClaimAsync(data, new Claim("EsParticipante", "1"));
+                    await userManager.AddClaimAsync(data, new Claim("EsParticipante", "2"));
                 }
             }
 
