@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace WebApiCasino.Validaciones
 {
-    public class ValidarNombres:ValidationAttribute
+    public class ValidarNombres : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
