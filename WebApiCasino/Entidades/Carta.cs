@@ -10,8 +10,25 @@ namespace WebApiCasino.Entidades
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [VerificarNumeroCarta]
         public int CartaId { get; set; }
         public string Nombre { get; set; }
+        public string Persona { get; set; }
+
+        //Verificar numero de la carta
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (CartaId != null)
+            {
+                int valorAux = ((int)CartaId);
+                if (valorAux == 0 || valorAux < 0 || valorAux > 54)
+                {
+                    yield return new ValidationResult("El numero escogido debe ser entre el 1 al 54");
+                }
+            }
+            else
+            {
+                yield return ValidationResult.Success;
+            }
+        }
     }
 }

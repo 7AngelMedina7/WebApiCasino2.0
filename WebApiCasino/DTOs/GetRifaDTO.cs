@@ -1,10 +1,13 @@
-﻿using WebApiCasino.Entidades;
+﻿using System.ComponentModel.DataAnnotations;
+using WebApiCasino.Entidades;
+using WebApiCasino.Validaciones;
 
 namespace WebApiCasino.DTOs
 {
     public class GetRifaDTO
     {
-
+        [Required(ErrorMessage = "El Nombre es obligatorio")]
+        [ValidarNombres]
         public string Nombre { get; set; }
         //premios y cartas
 

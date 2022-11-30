@@ -15,11 +15,10 @@ namespace WebApiCasino.Entidades
         [Range(1,54 ,ErrorMessage ="Solo se puededn añadir de {0} a {54} premios")]
         public int Lugar { get; set; }
 
-        [MinLength(5, ErrorMessage = "Escribe el nombre del premio completo")]
+        [ValidarNombres]
         public string Recompensa { get; set; }
 
         public virtual ICollection<Rifa> Rifas { get; set; }
-
     }
 
     //añadir con los DTOS basandote en la tarea

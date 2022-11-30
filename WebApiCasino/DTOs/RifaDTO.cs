@@ -2,25 +2,15 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using WebApiCasino.Entidades;
+using WebApiCasino.Validaciones;
 
 namespace WebApiCasino.DTOs
-
 {
-    [Keyless]
     public class RifaDTO
     {
+        [Required(ErrorMessage = "El Id es obligatorio")]
         public int Id { get; set; }
+        [ValidarNombres]
         public string Nombre { get; set; }
-
-        public DateTime CreationDate { get; set; }
-        //premios, participantes y cartas
-        //public Premio Premios { get; set; }
-        //public Carta Cartas { get; set; }
-        //public Participante Participante { get; set; }
-
-
-        //public virtual ICollection<Premio> Premios { get; set; }
-        //public virtual ICollection<Carta> Cartas { get; set; }
-        //public virtual ICollection<Participante> Participantes { get; set; }
     }
 }

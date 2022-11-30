@@ -39,7 +39,6 @@ namespace WebApiCasino.Controllers
                 return BadRequest("Ya existe");
             }
             var rifaAux = mapper.Map<Rifa>(objRifa);
-            rifaAux.CreationDate = DateTime.Now;
             dbContext.Add(rifaAux);
             await dbContext.SaveChangesAsync();
             return Ok($"El Id de la Rifa es: {rifaAux.Id}");

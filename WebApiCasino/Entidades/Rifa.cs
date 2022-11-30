@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApiCasino.Validaciones;
 
 namespace WebApiCasino.Entidades
 {
@@ -9,7 +10,7 @@ namespace WebApiCasino.Entidades
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        [StringLength(20, ErrorMessage = "El nombre de la rifa debe ser mas corto")]
+        [ValidarNombres]
         public string Nombre { get; set; }
         
 

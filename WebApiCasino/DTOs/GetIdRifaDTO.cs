@@ -5,7 +5,7 @@ namespace WebApiCasino.DTOs
 {
     public class GetIdRifaDTO
     {
-        [Required]
+        [Required(ErrorMessage = "El Id es obligatorio")]
         [ValidarMayorACero]
         public int Id { get; set; }
     }

@@ -6,16 +6,17 @@ namespace WebApiCasino.DTOs
 {
     public class ParticipantesDTO
     {
-        
-        [Required]
+
+        [Required(ErrorMessage = "El Correo es obligatorio")]
+        [EmailAddress]
         public string Correo { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El Nombre es obligatorio")]
+        [ValidarNombres]
         public string Nombre { get; set; }
 
         [Required]
-        [Range(1, 54, ErrorMessage = "No")]
-        [VerificarNumeroCarta]
+        
         public int Numero_Escogido { get; set; }
     }
 }

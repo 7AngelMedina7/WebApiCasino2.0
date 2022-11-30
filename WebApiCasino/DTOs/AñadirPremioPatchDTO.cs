@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using WebApiCasino.Validaciones;
+﻿using WebApiCasino.Validaciones;
 
 namespace WebApiCasino.DTOs
 {
-    public class PremioDTO
+    public class AñadirPremioPatchDTO
     {
-        [ValidarLugar]
+        [ValidarMayorACero]
         public int Lugar { get; set; }
         [ValidarNombres]
         public string Recompensa { get; set; }

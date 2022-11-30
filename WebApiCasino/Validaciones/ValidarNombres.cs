@@ -7,14 +7,18 @@ namespace WebApiCasino.Validaciones
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value == null || string.IsNullOrEmpty(value.ToString()))
-            {
-                return new ValidationResult("Debe escribir el nombre");
-            }
-            else (){
+            var primeraLetra = value.ToString()[0].ToString();
 
+            if ((value.ToString()).Length <5){
+                return new ValidationResult("El nombre debe ser correcto (Mayor a 5 caracteres)");
+            }else if (primeraLetra != primeraLetra.ToUpper())
+            {
+                return new ValidationResult("La primera letra debe de ser mayuscula");
+            }else if((value.ToString()).Length < 100)
+            {
+                return new ValidationResult("El nombre debe ser mas corto (Menor a 100 caracteres)");
             }
-            return base.IsValid(value, validationContext);
+            return ValidationResult.Success;
         }
     }
 }
