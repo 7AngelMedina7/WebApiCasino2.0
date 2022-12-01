@@ -11,6 +11,10 @@ using System.Text.Json.Serialization;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using WebApiCasino.Utilidades;
+using WebApiCasino.Filtros;
+using WebApiCasino.Services;
+
+
 
 namespace WebApiCasino
 {
@@ -28,11 +32,24 @@ namespace WebApiCasino
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers(opciones =>
+            {
+                opciones.Filters.Add(typeof(FiltroDeExcepcion));
+            }).AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
+            services.AddTransient<IService, ServiceA>();
+
+            services.AddTransient<ServiceTransient>();
+
+            services.AddScoped<ServiceScoped>();
+            services.AddSingleton<ServiceSingleton>();
+            services.AddTransient<FiltroDeAccion>();
+            services.AddHostedService<EscribirEnArchivo>();
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
-
+            services.AddEndpointsApiExplorer();
 
             services.AddResponseCaching();
 
