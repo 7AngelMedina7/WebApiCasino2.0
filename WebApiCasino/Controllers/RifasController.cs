@@ -22,7 +22,6 @@ namespace WebApiCasino.Controllers
         public RifasController(ApplicationDbContext dbContext, IMapper mapper,ILogger<RifasController>logger)
         {
             //Inyeccion de dependecias
-
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.logger = logger;
@@ -44,38 +43,38 @@ namespace WebApiCasino.Controllers
             return Ok($"El Id de la Rifa es: {rifaAux.Id}");
         }
 
-        [HttpGet]
+        [HttpGet("Obtener_Rifas")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Rifa>>> Get()
+        public async Task<ActionResult<List<GetRifaDTO>>> Get()
         {
             logger.LogInformation("Obteneniendo las Rifas");
-            var rifas = dbContext.Rifas.ToList();
-            return rifas;
+            var rifas = await dbContext.Rifas.ToListAsync();
+            return mapper.Map<List<GetRifaDTO>>(rifas);
         }
-
-        [HttpGet("{id:int}")]
+        [HttpGet("Obetener_numero_rifa{id:int}")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
-        public async Task<ActionResult<Rifa>> Get(int id)
+        public async Task<ActionResult<RifaDTO>> GetById(int id)
         {
             var aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == id);
             if (aux == null)
             {
-                logger.LogWarning($"El autor de Id{id}no ha sido encontrado");
-                return NotFound();
+                logger.LogWarning($"La Rifa con el Id: {id} no ha sido encontrado");
+                return NotFound(); 
             }
-            return aux;
+            return mapper.Map<RifaDTO>(aux);
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [AllowAnonymous]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<GetRifaDTO>> Delete(int id)
         {
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
             if (!existe)
             {
-                return NotFound("El recurso no fue encontrado");
+                return NotFound($"La rifa con el Id {id} no fue encontrado");
             }
             dbContext.Rifas.Remove(new Rifa()
             {
@@ -86,13 +85,15 @@ namespace WebApiCasino.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [AllowAnonymous]
+
+//        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<GetRifaDTO>> Patch(int id, [FromBody] RifaDTO objRifa)
         {
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
             if (!existe)
             {
-                return NotFound("El recurso no fue encontrado");
+                return NotFound($"La Rifa con el id: {id} no fue encontrado");
             }
             dbContext.Rifas.Update(new Rifa()
             {
@@ -104,13 +105,13 @@ namespace WebApiCasino.Controllers
         }
 
         [HttpPut("{id:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<IActionResult> Put(int id, [FromBody] RifaDTO objRifa)
         {
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
             if (!existe)
             {
-                return NotFound("El recurso no fue encontrado");
+                return NotFound($"La rifa con el Id {id} no fue encontrado");
             }
             dbContext.Rifas.Update(new Rifa()
             {
@@ -122,8 +123,10 @@ namespace WebApiCasino.Controllers
         }
 
         //Hacer cambio a get con las variables con int y string
-        [HttpPost("search")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //{id:int} {nombre}
+        [HttpGet("Buscar Rifa {id:int} {nombre}")]
+        [AllowAnonymous]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Rifa>> Search([FromBody] BuscarRifaDTO buscarRifaDTO)
         {
             var aux = dbContext.Rifas.FirstOrDefault(db => db.Nombre == buscarRifaDTO.Nombre);
@@ -136,23 +139,22 @@ namespace WebApiCasino.Controllers
             }
             return aux;
         }
+
         [AllowAnonymous]
-        [HttpPatch("JsonPatch/{id}")]
-        public async Task<IActionResult>Patch (int id, JsonPatchDocument<Rifa> rifasAux)
-        {//ver como cambiar la forma en  la que pide en swagger Quiza con mapper
+        [HttpPatch("JsonPatch/{id:int}")]
+        public async Task<ActionResult<RifasDtoPatch>> Patch(int id, JsonPatchDocument<Rifa> rifasAux)
+        {
             var rifas = await dbContext.Rifas.FirstOrDefaultAsync(a => a.Id == id);
             //  [{"op":"replace", "path": "Nombre", "value": "test"}]
-            logger.LogInformation("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            logger.LogWarning(rifasAux.ToString());
-            if (rifas==null)
+            
+            if (rifas == null)
             {
                 return NotFound();
             }
-            
             rifasAux.ApplyTo(rifas);
             await dbContext.SaveChangesAsync();
             return Ok(rifas);
         }
-
+        
     }
 }

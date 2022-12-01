@@ -6,13 +6,13 @@ namespace WebApiCasino.DTOs
 {
     public class GetRifaDTO
     {
-        [Required(ErrorMessage = "El Nombre es obligatorio")]
+        public int Id { get; set; }
         [ValidarNombres]
         public string Nombre { get; set; }
-        //premios y cartas
+        
 
         public List<PremioDTO> Premios { get; set; }
         public List<CartaDTO> Carta { get; set; }
-        public List <ParticipantesDTO> Participantes { get; set; }
+        //public List <Usu> Participantes { get; set; }
     }
 }

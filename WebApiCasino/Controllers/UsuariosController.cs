@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApiCasino.DTOs;
 using WebApiCasino.DTOs.Autenticacion;
 using WebApiCasino.Entidades;
 
@@ -20,14 +23,18 @@ namespace WebApiCasino.Controllers
         private readonly UserManager<IdentityUser> userManager;
         readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IMapper mapper;
+        public ApplicationDbContext dbContext { get; }
 
-        public UsuariosController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager)
+        public UsuariosController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbContext, IMapper mapper)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
+            this.mapper = mapper;
+            this.dbContext = dbContext;
         }
-
+        
         [AllowAnonymous]
         [HttpPost("registrar")]
         public async Task<ActionResult<DatosAutenticacion>> Registrar(RegistroDTO registroDTO)
@@ -74,7 +81,23 @@ namespace WebApiCasino.Controllers
                 return await ConstruirToken(user);
             }
         }
-
+        //[HttpPost("{id:int}/eliminar-participante")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        //public async Task<IActionResult> EliminarParticipante(int id, [FromBody] RifaDTO objRifa)
+        //{
+        //    var existe = await dbContext.RifaParticipantes.AnyAsync(a => a.RifaRefId == id && (a.ParticipanteRefId = objRifa.Id));
+        //    if (!existe)
+        //    {
+        //        return NotFound("El recurso no fue encontrado");
+        //    }
+        //    dbContext.RifaParticipantes.Remove(new RifaParticipante()
+        //    {
+        //        ParticipanteRefId = objRifa.Id,
+        //        RifaRefId = id
+        //    });
+        //    await dbContext.SaveChangesAsync();
+        //    return Ok();
+        //}
         private async Task<ActionResult<DatosAutenticacion>> ConstruirToken(IdentityUser usuario)
         {
             var claims = new List<Claim>
@@ -102,7 +125,7 @@ namespace WebApiCasino.Controllers
                 Expiracion = expiration
             };
         }
-
+        
 
     }
 }

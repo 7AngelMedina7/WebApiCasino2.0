@@ -35,7 +35,7 @@ namespace WebApiCasino.Controllers
             var existe = await dbContext.Premios.AnyAsync(a => a.Id == id);
             if (!existe)
             {
-                return NotFound("El recurso no fue encontrado");
+                return NotFound($"El premio con el Id {id} no fue encontrado");
             }
             dbContext.Premios.Update(new Premio()
             {

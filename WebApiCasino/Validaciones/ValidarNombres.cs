@@ -14,7 +14,7 @@ namespace WebApiCasino.Validaciones
             }else if (primeraLetra != primeraLetra.ToUpper())
             {
                 return new ValidationResult("La primera letra debe de ser mayuscula");
-            }else if((value.ToString()).Length < 100)
+            }else if((value.ToString()).Length > 100)
             {
                 return new ValidationResult("El nombre debe ser mas corto (Menor a 100 caracteres)");
             }

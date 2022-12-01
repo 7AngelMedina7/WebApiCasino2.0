@@ -16,6 +16,7 @@ namespace WebApiCasino.Entidades
 
         //premios y carta
         public virtual ICollection<Premio> Premios { get; set; }
+
         public virtual ICollection<RifaParticipante> RifaParticipantes { get; set; }
     }
 }

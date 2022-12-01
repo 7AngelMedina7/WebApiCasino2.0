@@ -30,8 +30,6 @@ namespace WebApiCasino
             services.AddControllers().AddNewtonsoftJson();
 
 
-
-
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
@@ -83,15 +81,12 @@ namespace WebApiCasino
             });
 
             //
-            services.AddAutoMapper(typeof(StartUp).Assembly, typeof(AutoMapperProfiles).Assembly);
+            services.AddAutoMapper(typeof(StartUp));
+
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
-
-
-
-
             //
             services.AddAuthorization(opciones =>
             {
@@ -120,6 +115,11 @@ namespace WebApiCasino
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //endpoints.MapAreaControllerRoute(
+                //    name: "id",
+                //    areaName: "Nombre",
+                //     pattern: "{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapRazorPages();
             });
         }
     }
