@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 var startup = new StartUp(builder.Configuration);
 
 startup.ConfigureServices(builder.Services);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddMvcCore().AddApiExplorer();

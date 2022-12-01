@@ -81,7 +81,7 @@ namespace WebApiCasino
             });
 
             //
-            services.AddAutoMapper(typeof(StartUp));
+            // services.AddAutoMapper(typeof(StartUp));
 
 
             services.AddIdentity<IdentityUser, IdentityRole>()

@@ -10,8 +10,6 @@ namespace WebApiCasino.Entidades
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RifaParticipanteId { get; set; } 
         
-        public string RifaNombre { get; set; }
-
         [ForeignKey("Rifa")]
         public int RifaRefId { get; set; }
         public Rifa Rifa { get; set; }

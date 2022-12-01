@@ -220,21 +220,6 @@ namespace WebApiCasino.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PremioRifa", b =>
-                {
-                    b.Property<int>("PremiosId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RifasId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PremiosId", "RifasId");
-
-                    b.HasIndex("RifasId");
-
-                    b.ToTable("PremioRifa");
-                });
-
             modelBuilder.Entity("WebApiCasino.Entidades.Carta", b =>
                 {
                     b.Property<int>("Id")
@@ -249,6 +234,9 @@ namespace WebApiCasino.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Persona")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Cartas");
@@ -258,326 +246,417 @@ namespace WebApiCasino.Migrations
                         {
                             Id = 1,
                             CartaId = 1,
-                            Nombre = "El Gallo "
+                            Nombre = "El Gallo ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 2,
                             CartaId = 2,
-                            Nombre = "El Diablo "
+                            Nombre = "El Diablo ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 3,
                             CartaId = 3,
-                            Nombre = "La Dama "
+                            Nombre = "La Dama ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 4,
                             CartaId = 4,
-                            Nombre = "El Catrin "
+                            Nombre = "El Catrin ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 5,
                             CartaId = 5,
-                            Nombre = "El Paraguas "
+                            Nombre = "El Paraguas ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 6,
                             CartaId = 6,
-                            Nombre = "La Sirena "
+                            Nombre = "La Sirena ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 7,
                             CartaId = 7,
-                            Nombre = "La Escalera "
+                            Nombre = "La Escalera ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 8,
                             CartaId = 8,
-                            Nombre = "La Botella "
+                            Nombre = "La Botella ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 9,
                             CartaId = 9,
-                            Nombre = "El Barril "
+                            Nombre = "El Barril ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 10,
                             CartaId = 10,
-                            Nombre = "El Arbol "
+                            Nombre = "El Arbol ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 11,
                             CartaId = 11,
-                            Nombre = "El Melon "
+                            Nombre = "El Melon ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 12,
                             CartaId = 12,
-                            Nombre = "El Valiente "
+                            Nombre = "El Valiente ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 13,
                             CartaId = 13,
-                            Nombre = "El Gorrito "
+                            Nombre = "El Gorrito ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 14,
                             CartaId = 14,
-                            Nombre = "La Muerte "
+                            Nombre = "La Muerte ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 15,
                             CartaId = 15,
-                            Nombre = "La Pera "
+                            Nombre = "La Pera ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 16,
                             CartaId = 16,
-                            Nombre = "La Bandera "
+                            Nombre = "La Bandera ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 17,
                             CartaId = 17,
-                            Nombre = "El Bandolon "
+                            Nombre = "El Bandolon ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 18,
                             CartaId = 18,
-                            Nombre = "El Violoncello "
+                            Nombre = "El Violoncello ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 19,
                             CartaId = 19,
-                            Nombre = "La Garza "
+                            Nombre = "La Garza ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 20,
                             CartaId = 20,
-                            Nombre = "El Pajaro "
+                            Nombre = "El Pajaro ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 21,
                             CartaId = 21,
-                            Nombre = "La Mano "
+                            Nombre = "La Mano ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 22,
                             CartaId = 22,
-                            Nombre = "La Bota "
+                            Nombre = "La Bota ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 23,
                             CartaId = 23,
-                            Nombre = "La Luna "
+                            Nombre = "La Luna ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 24,
                             CartaId = 24,
-                            Nombre = "El Cotorro "
+                            Nombre = "El Cotorro ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 25,
                             CartaId = 25,
-                            Nombre = "El Borracho "
+                            Nombre = "El Borracho ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 26,
                             CartaId = 26,
-                            Nombre = "El Negrito "
+                            Nombre = "El Negrito ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 27,
                             CartaId = 27,
-                            Nombre = "El Corazon "
+                            Nombre = "El Corazon ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 28,
                             CartaId = 28,
-                            Nombre = "La Sandia "
+                            Nombre = "La Sandia ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 29,
                             CartaId = 29,
-                            Nombre = "El Tambor "
+                            Nombre = "El Tambor ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 30,
                             CartaId = 30,
-                            Nombre = "El Camaron "
+                            Nombre = "El Camaron ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 31,
                             CartaId = 31,
-                            Nombre = "Las Jaras "
+                            Nombre = "Las Jaras ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 32,
                             CartaId = 32,
-                            Nombre = "El Musico "
+                            Nombre = "El Musico ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 33,
                             CartaId = 33,
-                            Nombre = "La Araña "
+                            Nombre = "La Araña ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 34,
                             CartaId = 34,
-                            Nombre = "El Soldado "
+                            Nombre = "El Soldado ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 35,
                             CartaId = 35,
-                            Nombre = "La Estrella "
+                            Nombre = "La Estrella ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 36,
                             CartaId = 36,
-                            Nombre = "El Cazo "
+                            Nombre = "El Cazo ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 37,
                             CartaId = 37,
-                            Nombre = "El Mundo "
+                            Nombre = "El Mundo ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 38,
                             CartaId = 38,
-                            Nombre = "El Apache "
+                            Nombre = "El Apache ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 39,
                             CartaId = 39,
-                            Nombre = "El Nopal "
+                            Nombre = "El Nopal ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 40,
                             CartaId = 40,
-                            Nombre = "El Alacran "
+                            Nombre = "El Alacran ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 41,
                             CartaId = 41,
-                            Nombre = "La Rosa "
+                            Nombre = "La Rosa",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 42,
                             CartaId = 42,
-                            Nombre = "La Calavera "
+                            Nombre = "La Calavera ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 43,
                             CartaId = 43,
-                            Nombre = "La Campana "
+                            Nombre = "La Campana ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 44,
                             CartaId = 44,
-                            Nombre = "El Cantarito "
+                            Nombre = "El Cantarito ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 45,
                             CartaId = 45,
-                            Nombre = "El Venado "
+                            Nombre = "El Venado ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 46,
                             CartaId = 46,
-                            Nombre = "El Sol "
+                            Nombre = "El Sol ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 47,
                             CartaId = 47,
-                            Nombre = "La Corona "
+                            Nombre = "La Corona ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 48,
                             CartaId = 48,
-                            Nombre = "La Chalupa "
+                            Nombre = "La Chalupa ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 49,
                             CartaId = 49,
-                            Nombre = "El Pino "
+                            Nombre = "El Pino ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 50,
                             CartaId = 50,
-                            Nombre = "El Pescado "
+                            Nombre = "El Pescado ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 51,
                             CartaId = 51,
-                            Nombre = "La Palma "
+                            Nombre = "La Palma ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 52,
                             CartaId = 52,
-                            Nombre = "La Maceta "
+                            Nombre = "La Maceta ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 53,
                             CartaId = 53,
-                            Nombre = "El Arpa "
+                            Nombre = "El Arpa ",
+                            Persona = ""
                         },
                         new
                         {
                             Id = 54,
                             CartaId = 54,
-                            Nombre = "El Rana "
+                            Nombre = "La Rana ",
+                            Persona = ""
                         });
+                });
+
+            modelBuilder.Entity("WebApiCasino.Entidades.Ganadores", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("HResult")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HelpLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParticipanteRefId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PremioRefId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RifaRefId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Source")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParticipanteRefId");
+
+                    b.HasIndex("PremioRefId");
+
+                    b.HasIndex("RifaRefId");
+
+                    b.ToTable("Ganadores");
                 });
 
             modelBuilder.Entity("WebApiCasino.Entidades.Premio", b =>
@@ -594,7 +673,15 @@ namespace WebApiCasino.Migrations
                     b.Property<string>("Recompensa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RifaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RifaRefId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RifaId");
 
                     b.ToTable("Premios");
                 });
@@ -607,10 +694,8 @@ namespace WebApiCasino.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -629,14 +714,8 @@ namespace WebApiCasino.Migrations
                     b.Property<int>("CartaRefId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ParticipanteRefId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RifaNombre")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RifaRefId")
                         .HasColumnType("int");
@@ -703,19 +782,38 @@ namespace WebApiCasino.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PremioRifa", b =>
+            modelBuilder.Entity("WebApiCasino.Entidades.Ganadores", b =>
                 {
-                    b.HasOne("WebApiCasino.Entidades.Premio", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "ParticipanteGanador")
                         .WithMany()
-                        .HasForeignKey("PremiosId")
+                        .HasForeignKey("ParticipanteRefId");
+
+                    b.HasOne("WebApiCasino.Entidades.Premio", "PremioGanador")
+                        .WithMany()
+                        .HasForeignKey("PremioRefId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApiCasino.Entidades.Rifa", null)
-                        .WithMany()
-                        .HasForeignKey("RifasId")
+                    b.HasOne("WebApiCasino.Entidades.Rifa", "RifaGanador")
+                        .WithMany("Ganadores")
+                        .HasForeignKey("RifaRefId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ParticipanteGanador");
+
+                    b.Navigation("PremioGanador");
+
+                    b.Navigation("RifaGanador");
+                });
+
+            modelBuilder.Entity("WebApiCasino.Entidades.Premio", b =>
+                {
+                    b.HasOne("WebApiCasino.Entidades.Rifa", "Rifa")
+                        .WithMany("Premios")
+                        .HasForeignKey("RifaId");
+
+                    b.Navigation("Rifa");
                 });
 
             modelBuilder.Entity("WebApiCasino.Entidades.RifaParticipante", b =>
@@ -731,7 +829,7 @@ namespace WebApiCasino.Migrations
                         .HasForeignKey("ParticipanteRefId");
 
                     b.HasOne("WebApiCasino.Entidades.Rifa", "Rifa")
-                        .WithMany("RifaParticipantes")
+                        .WithMany("RifaParticipante")
                         .HasForeignKey("RifaRefId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -745,7 +843,11 @@ namespace WebApiCasino.Migrations
 
             modelBuilder.Entity("WebApiCasino.Entidades.Rifa", b =>
                 {
-                    b.Navigation("RifaParticipantes");
+                    b.Navigation("Ganadores");
+
+                    b.Navigation("Premios");
+
+                    b.Navigation("RifaParticipante");
                 });
 #pragma warning restore 612, 618
         }

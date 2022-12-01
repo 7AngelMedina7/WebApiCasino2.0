@@ -74,68 +74,12 @@ namespace WebApiCasino
                 new Carta(){ Id =54, CartaId = 54, Nombre = "La Rana ",Persona= ""}
 
             });
-            builder.Entity<Premio>().HasData(new Premio[] {
-                   new Premio(){Id= 1, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 2, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 3, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 4, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 5, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 6, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 7, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 8, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 9, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 10, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 11, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 12, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 13, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 14, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 15, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 16, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 17, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 18, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 19, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 20, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 21, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 22, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 23, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 24, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 25, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 26, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 27, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 28, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 29, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 30, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 31, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 32, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 33, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 34, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 35, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 36, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 37, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 38, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 39, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 40, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 41, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 42, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 43, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 44, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 45, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 46, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 47, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 48, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 49, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 50, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 51, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 52, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 53, Lugar = 0, Recompensa = "", },
-                   new Premio(){Id= 54, Lugar = 0, Recompensa = "", }
-            });
-            //añadir los premios vacios
         }
         //Cuando se cree la bd se creara una tabla con los datos de:
         public DbSet<RifaParticipante> RifaParticipantes { get; set; }
         public DbSet<Rifa> Rifas { get; set; }
         public DbSet<Carta> Cartas { get; set; }
         public DbSet<Premio> Premios { get; set; }
+        public DbSet<Ganadores> Ganadores { get; set; }
     }
 }

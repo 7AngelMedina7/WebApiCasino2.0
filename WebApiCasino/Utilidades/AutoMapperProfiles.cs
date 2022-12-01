@@ -12,37 +12,55 @@ namespace WebApiCasino.Utilidades
             CreateMap<Rifa, RifaDTO>();
             CreateMap<RifaDTO, Rifa>();
 
-            CreateMap<Rifa, GetIdRifaDTO>();
-            CreateMap<GetIdRifaDTO, Rifa>();
+            //CreateMap<Rifa, GetIdRifaDTO>();
+            //CreateMap<GetIdRifaDTO, Rifa>();
 
-            CreateMap<Premio, AñadirPremioPatchDTO>();
-            CreateMap<AñadirPremioPatchDTO, Premio>();
+            //CreateMap<Premio, AñadirPremioPatchDTO>();
+            //CreateMap<AñadirPremioPatchDTO, Premio>();
 
-            CreateMap<BuscarRifaDTO, Rifa>();
-            CreateMap<Rifa, BuscarRifaDTO>();
+            //CreateMap<BuscarRifaDTO, Rifa>();
+            //CreateMap<Rifa, BuscarRifaDTO>();
 
-            CreateMap<CartaDTO, Carta>();
-            CreateMap<Carta, CartaDTO>();
+            //CreateMap<CartaDTO, Carta>();
+            //CreateMap<Carta, CartaDTO>();
 
-            CreateMap<CartaEscogidaPatchDTO, Carta>();
-            CreateMap<Carta, CartaEscogidaPatchDTO>();
+            //CreateMap<CartaEscogidaPatchDTO, Carta>();
+            //CreateMap<Carta, CartaEscogidaPatchDTO>();
 
-            CreateMap<CrearUsuarioConRifa, Rifa>();
-            CreateMap<Rifa, CrearUsuarioConRifa>();
+            //CreateMap<CrearUsuarioConRifa, Rifa>();
+            //CreateMap<Rifa, CrearUsuarioConRifa>();
 
-            CreateMap<GetIdPremioDTO, Premio>();
-            CreateMap<Premio, GetIdPremioDTO>();
+            //CreateMap<GetIdPremioDTO, Premio>();
+            //CreateMap<Premio, GetIdPremioDTO>();
 
             CreateMap<GetRifaDTO, Rifa>();
-            CreateMap<Rifa, GetRifaDTO>();
+            CreateMap<Rifa, GetRifaDTO>()
+            .ForMember(dest =>
+                dest.Id,
+                opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest =>
+                dest.Nombre,
+                opt => opt.MapFrom(src => src.Nombre));
 
-            CreateMap<RifasDtoPatch, Rifa>();
+            CreateMap<RifaDTOParticipante, RifaParticipante>()
+            .ForMember(dest =>
+                dest.RifaRefId,
+                opt => opt.MapFrom(src => src.RifaId))
+            .ForMember(dest =>
+                dest.ParticipanteRefId,
+                opt => opt.MapFrom(src => src.ParticipanteId))
+            .ForMember(dest =>
+                dest.CartaRefId,
+                opt => opt.MapFrom(src => src.CartaId));
+
             CreateMap<Rifa, RifasDtoPatch>();
 
             CreateMap<Premio, PremioDTO>();
-            CreateMap<PremioDTO, Premio>();
+            CreateMap<PremioDTO, Premio>().ForMember(dest =>
+                dest.RifaRefId,
+                opt => opt.MapFrom(src => src.RifaId));
         }
 
-        
+
     }
 }

@@ -12,13 +12,14 @@ namespace WebApiCasino.Entidades
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [ValidarLugar]
-        [Range(1,54 ,ErrorMessage ="Solo se puededn añadir de {0} a {54} premios")]
         public int Lugar { get; set; }
 
         [ValidarNombres]
         public string Recompensa { get; set; }
 
-        public virtual ICollection<Rifa> Rifas { get; set; }
+        [ForeignKey("RifaPremio")]
+        public int RifaRefId { get; set; }
+        public Rifa Rifa { get; set; }
     }
 
     //añadir con los DTOS basandote en la tarea

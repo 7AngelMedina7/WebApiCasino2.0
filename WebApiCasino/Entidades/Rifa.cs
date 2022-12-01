@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApiCasino.DTOs;
 using WebApiCasino.Validaciones;
 
 namespace WebApiCasino.Entidades
@@ -12,11 +13,12 @@ namespace WebApiCasino.Entidades
         [Required]
         [ValidarNombres]
         public string Nombre { get; set; }
-        
+
 
         //premios y carta
-        public virtual ICollection<Premio> Premios { get; set; }
+        public ICollection<Premio> Premios { get; set; }
+        public ICollection<RifaParticipante> RifaParticipante { get; set; }
+        public ICollection<Ganadores> Ganadores { get; set; }
 
-        public virtual ICollection<RifaParticipante> RifaParticipantes { get; set; }
     }
 }

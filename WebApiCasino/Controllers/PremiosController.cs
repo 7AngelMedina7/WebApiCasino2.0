@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiCasino.DTOs;
@@ -18,7 +20,9 @@ namespace WebApiCasino.Controllers
             this.mapper = mapper;
             this.dbContext = dbContext;
         }
-        [HttpGet("VerPremios")]
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<PremioDTO>> Get()
         {
             var verificarPremios =  dbContext.Premios.Where(db => db.Recompensa != string.Empty);
@@ -26,24 +30,27 @@ namespace WebApiCasino.Controllers
             {
                 return NotFound();
             }
-            return Ok(verificarPremios);
+            PremioDTO premioAux = mapper.Map<PremioDTO>(verificarPremios);
+            return premioAux;
         }
 
-        [HttpPatch("Añadir_premio{id:int}")]
-        public async Task<ActionResult<AñadirPremioPatchDTO>> Patch(int id, [FromBody] PremioDTO objRifa)
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        public async Task<ActionResult<AddRifaDTO>> Patch(int id, [FromBody] PremioDTO premioDTO)
         {
-            var existe = await dbContext.Premios.AnyAsync(a => a.Id == id);
-            if (!existe)
+            var existe = await dbContext.Premios.AnyAsync(a => a.Lugar == premioDTO.Lugar && a.RifaRefId == premioDTO.RifaId);
+            if (existe)
             {
-                return NotFound($"El premio con el Id {id} no fue encontrado");
+                return NotFound($"El premio con el lugar #{premioDTO.Lugar} ya existe.");
             }
-            dbContext.Premios.Update(new Premio()
-            {
-                Lugar = objRifa.Lugar,
-                Recompensa = objRifa.Recompensa
-            });
+
+            Premio premio = mapper.Map<Premio>(premioDTO);
+            dbContext.Add(premio);
             await dbContext.SaveChangesAsync();
-            return Ok();
+
+            var premioS = await dbContext.Premios.FirstOrDefaultAsync(a => a.Lugar == premioDTO.Lugar && a.RifaRefId == premioDTO.RifaId);
+
+            return new AddRifaDTO() { message = "Premio registrado correctamente.", data = premioS };
         }
 
     }

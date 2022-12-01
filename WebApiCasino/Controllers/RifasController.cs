@@ -28,9 +28,8 @@ namespace WebApiCasino.Controllers
         }
 
         [HttpPost]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] RifaDTO objRifa)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        public async Task<ActionResult<AddRifaDTO>> Post([FromBody] RifaDTO objRifa)
         {
             var veifircarNombreRifa = await dbContext.Rifas.AnyAsync(x => x.Nombre == objRifa.Nombre);
             if (veifircarNombreRifa)
@@ -40,35 +39,98 @@ namespace WebApiCasino.Controllers
             var rifaAux = mapper.Map<Rifa>(objRifa);
             dbContext.Add(rifaAux);
             await dbContext.SaveChangesAsync();
-            return Ok($"El Id de la Rifa es: {rifaAux.Id}");
+
+            var aux = await dbContext.Rifas.FirstOrDefaultAsync(x => x.Nombre == objRifa.Nombre);
+
+            AddRifaDTO addRifa = new AddRifaDTO() { message = $"El Id de la Rifa es: {rifaAux.Id}", data = mapper.Map<GetRifaDTO>(aux) };
+            return Ok(addRifa);
         }
 
-        [HttpGet("Obtener_Rifas")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [AllowAnonymous]
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<GetRifaDTO>>> Get()
         {
             logger.LogInformation("Obteneniendo las Rifas");
             var rifas = await dbContext.Rifas.ToListAsync();
             return mapper.Map<List<GetRifaDTO>>(rifas);
         }
-        [HttpGet("Obetener_numero_rifa{id:int}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [AllowAnonymous]
+
+        [HttpGet("{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<RifaDTO>> GetById(int id)
         {
             var aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == id);
             if (aux == null)
             {
                 logger.LogWarning($"La Rifa con el Id: {id} no ha sido encontrado");
-                return NotFound(); 
+                return NotFound();
             }
             return mapper.Map<RifaDTO>(aux);
         }
 
+        [HttpGet("{id:int}/premios")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<PremioDTO>> GetPremios()
+        {
+            var verificarPremios = dbContext.Premios.Where(db => db.Recompensa != string.Empty);
+            if (verificarPremios == null)
+            {
+                return NotFound();
+            }
+            PremioDTO premioAux = mapper.Map<PremioDTO>(verificarPremios);
+            return Ok(premioAux);
+        }
+
+        [HttpGet("{id:int}/boletos-disponibles")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<Carta>>> GetBoletosDisponibles(int id)
+        {
+            List<Carta> boletosDisponibles = dbContext.Cartas.Where(x => !dbContext.RifaParticipantes.Any(p => p.CartaRefId == x.Id && p.RifaRefId == id)).ToList();
+
+            return boletosDisponibles;
+        }
+
+        [HttpGet("{id:int}/obtener-ganador")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        public async Task<ActionResult<AddRifaDTO>> GetObtenerGanador(int id)
+        {
+            var premios = dbContext.Premios.Where(p => !dbContext.Ganadores.Any(g => g.PremioRefId == p.Id)).ToList();
+            if (premios.Count == 0)
+            {
+                return BadRequest("No hay premios por entregar, todos fueron asignados.");
+            }
+            var participantes = dbContext.RifaParticipantes.Where(p => !dbContext.Ganadores.Any(g => g.ParticipanteRefId == p.ParticipanteRefId)).ToList();
+            if (participantes.Count == 0)
+            {
+                return BadRequest("No hay participantes para entregarles premios.");
+            }
+            var premio = premios.Find(p => p.Lugar == premios.Max(premio => premio.Lugar));
+            var winner = false;
+            Random rand = new Random();
+            RifaParticipante boletoGanador;
+            do
+            {
+                int number = rand.Next(1, 54);
+                boletoGanador = dbContext.RifaParticipantes.FirstOrDefault(db => db.RifaRefId == id && db.CartaRefId == number);
+                if (boletoGanador != null)
+                {
+                    winner = true;
+                }
+            } while (!winner);
+
+            dbContext.Add(new Ganadores()
+            {
+                RifaRefId = id,
+                PremioRefId = premio.Id,
+                ParticipanteRefId = boletoGanador.ParticipanteRefId
+            });
+            await dbContext.SaveChangesAsync();
+
+            return new AddRifaDTO() { message = $"El boleto ganador es: {boletoGanador.CartaRefId}", data = boletoGanador };
+        }
+
         [HttpDelete("{id:int}")]
-        [AllowAnonymous]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<GetRifaDTO>> Delete(int id)
         {
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
@@ -85,9 +147,7 @@ namespace WebApiCasino.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        [AllowAnonymous]
-
-//        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<GetRifaDTO>> Patch(int id, [FromBody] RifaDTO objRifa)
         {
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
@@ -105,7 +165,7 @@ namespace WebApiCasino.Controllers
         }
 
         [HttpPut("{id:int}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<IActionResult> Put(int id, [FromBody] RifaDTO objRifa)
         {
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
@@ -124,25 +184,80 @@ namespace WebApiCasino.Controllers
 
         //Hacer cambio a get con las variables con int y string
         //{id:int} {nombre}
-        [HttpGet("Buscar Rifa {id:int} {nombre}")]
-        [AllowAnonymous]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("search")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Rifa>> Search([FromBody] BuscarRifaDTO buscarRifaDTO)
         {
             var aux = dbContext.Rifas.FirstOrDefault(db => db.Nombre == buscarRifaDTO.Nombre);
             if (buscarRifaDTO.Id != 0)
             {
                 aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == buscarRifaDTO.Id);
-            } else
+            }
+            else
             {
                 aux = dbContext.Rifas.FirstOrDefault(db => db.Nombre == buscarRifaDTO.Nombre);
             }
             return aux;
         }
 
+
+        //Hacer cambio a get con las variables con int y string
+        //{id:int} {nombre}
+        [HttpPost("registrar-participante")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante([FromBody] RifaDTOParticipante rifaDTOParticipante)
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var roleUser = currentUser.HasClaim(c => c.Type == "EsAdmin");
+            var userId = "";
+            if (roleUser == false)
+            {
+                userId = currentUser.FindFirst(c => c.Type == "UserId").Value;
+            }
+            else
+            {
+                userId = rifaDTOParticipante.ParticipanteId;
+            }
+            var veifircarNombreRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.ParticipanteRefId == userId && x.RifaRefId == rifaDTOParticipante.RifaId);
+            if (veifircarNombreRifa)
+            {
+                return BadRequest("El participante ya se encuentra registrado en la rifa.");
+            }
+            var veifircarCartaRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.CartaRefId == rifaDTOParticipante.CartaId && x.RifaRefId == rifaDTOParticipante.RifaId);
+            if (veifircarCartaRifa)
+            {
+                return BadRequest("El boleto ya se encuentra registrado en la rifa.");
+            }
+            rifaDTOParticipante.ParticipanteId = userId;
+
+            RifaParticipante rifaParticipanteAux = mapper.Map<RifaParticipante>(rifaDTOParticipante);
+            dbContext.Add(rifaParticipanteAux);
+            await dbContext.SaveChangesAsync();
+
+            var rifaParticipante = await dbContext.RifaParticipantes.FirstOrDefaultAsync(x => x.ParticipanteRefId == rifaDTOParticipante.ParticipanteId && x.RifaRefId == rifaDTOParticipante.RifaId);
+
+            return new AddRifaDTO() { message = "Participante registrado correctamente", data = rifaParticipante };
+        }
+
+        [HttpDelete("{IdRifa:int}/participante/{IdParticipante}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante(int IdRifa, String IdParticipante)
+        {
+            var veifircarNombreRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.ParticipanteRefId == IdParticipante && x.RifaRefId == IdRifa);
+            if (!veifircarNombreRifa)
+            {
+                return BadRequest("El participante no se encuentra registrado en la rifa.");
+            }
+
+            dbContext.RifaParticipantes.RemoveRange(dbContext.RifaParticipantes.Where(x => x.ParticipanteRefId == IdParticipante && x.RifaRefId == IdRifa));
+            await dbContext.SaveChangesAsync();
+
+            return new AddRifaDTO() { message = "Participante eliminado correctamente"};
+        }
+
         [AllowAnonymous]
-        [HttpPatch("JsonPatch/{id:int}")]
-        public async Task<ActionResult<RifasDtoPatch>> Patch(int id, JsonPatchDocument<Rifa> rifasAux)
+        [HttpPatch("json-patch/{id:int}")]
+        public async Task<ActionResult<RifasDtoPatch>> Patch(int id, [FromBody] RifasDtoPatch rifasAux)
         {
             var rifas = await dbContext.Rifas.FirstOrDefaultAsync(a => a.Id == id);
             //  [{"op":"replace", "path": "Nombre", "value": "test"}]
@@ -151,7 +266,7 @@ namespace WebApiCasino.Controllers
             {
                 return NotFound();
             }
-            rifasAux.ApplyTo(rifas);
+            //rifasAux.ApplyTo(rifas);
             await dbContext.SaveChangesAsync();
             return Ok(rifas);
         }
