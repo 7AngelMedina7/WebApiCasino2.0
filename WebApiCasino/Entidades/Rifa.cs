@@ -14,8 +14,6 @@ namespace WebApiCasino.Entidades
         [ValidarNombres]
         public string Nombre { get; set; }
 
-
-        //premios y carta
         public ICollection<Premio> Premios { get; set; }
         public ICollection<RifaParticipante> RifaParticipante { get; set; }
         public ICollection<Ganadores> Ganadores { get; set; }

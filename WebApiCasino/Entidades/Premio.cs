@@ -21,6 +21,4 @@ namespace WebApiCasino.Entidades
         public int RifaRefId { get; set; }
         public Rifa Rifa { get; set; }
     }
-
-    //añadir con los DTOS basandote en la tarea
 }

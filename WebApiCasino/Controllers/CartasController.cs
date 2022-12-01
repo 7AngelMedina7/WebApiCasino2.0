@@ -10,19 +10,16 @@ namespace WebApiCasino.Controllers
     [Route("cartas")]
     public class CartasController: ControllerBase
     {
-      public CartasController(ApplicationDbContext dbContext)
+        public CartasController(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
         public ApplicationDbContext dbContext { get; }
-
-
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<List<Carta>>> Get(Carta carta)
         {
             var cartas = dbContext.Cartas.ToList();
-
             return cartas;
         }
     }

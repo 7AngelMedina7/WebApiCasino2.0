@@ -43,7 +43,6 @@ namespace WebApiCasino.Controllers
             {
                 return NotFound($"El premio con el lugar #{premioDTO.Lugar} ya existe.");
             }
-
             Premio premio = mapper.Map<Premio>(premioDTO);
             dbContext.Add(premio);
             await dbContext.SaveChangesAsync();
@@ -55,16 +54,3 @@ namespace WebApiCasino.Controllers
 
     }
 }
-        //[HttpPost]
-        //public async Task<IActionResult> Post([FromBody] PremioDTO objPremio)
-        //{
-        //    var veifircarPremio = await dbContext.Premios.AnyAsync(x => x.Recompensa == objPremio.Recompensa);
-        //    if (veifircarPremio)
-        //    {
-        //        return BadRequest("Ya existe");
-        //    }
-        //    var premioAux = mapper.Map<Premio>(objPremio);
-        //    dbContext.Add(premioAux);
-        //    await dbContext.SaveChangesAsync();
-        //    return Ok();
-        //}

@@ -14,39 +14,41 @@ namespace WebApiCasino.Controllers
     [Route("/rifas")]
     public class RifasController : ControllerBase
     {
-
         private readonly IMapper mapper;
         private readonly ApplicationDbContext dbContext;
-        private readonly ILogger<RifasController> logger;
-        
+        private readonly ILogger<RifasController> logger; 
         public RifasController(ApplicationDbContext dbContext, IMapper mapper,ILogger<RifasController>logger)
         {
-            //Inyeccion de dependecias
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.logger = logger;
         }
 
         [HttpPost]
+        //Verificar si tiene el claim "EsAdmin"
+        //Postea una rifa nueva
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-        public async Task<ActionResult<AddRifaDTO>> Post([FromBody] RifaDTO objRifa)
+        public async Task<ActionResult<AddRifaDTO>> Post([FromBody] RifaDTO obj)
         {
-            var veifircarNombreRifa = await dbContext.Rifas.AnyAsync(x => x.Nombre == objRifa.Nombre);
+            //Verifica si el nombre de la risa ya existe en la base de batos
+            var veifircarNombreRifa = await dbContext.Rifas.AnyAsync(x => x.Nombre == obj.Nombre);
             if (veifircarNombreRifa)
             {
-                return BadRequest("Ya existe");
+                return BadRequest($"Ya existe el nombre {obj.Nombre}");
             }
-            var rifaAux = mapper.Map<Rifa>(objRifa);
+            var rifaAux = mapper.Map<Rifa>(obj);
             dbContext.Add(rifaAux);
             await dbContext.SaveChangesAsync();
 
-            var aux = await dbContext.Rifas.FirstOrDefaultAsync(x => x.Nombre == objRifa.Nombre);
+            var aux = await dbContext.Rifas.FirstOrDefaultAsync(x => x.Nombre == obj.Nombre);
 
             AddRifaDTO addRifa = new AddRifaDTO() { message = $"El Id de la Rifa es: {rifaAux.Id}", data = mapper.Map<GetRifaDTO>(aux) };
             return Ok(addRifa);
         }
 
+        //Obtiene todas las rifas registradas
         [HttpGet]
+        //Verifica que el usuario este registrado antes de usarlo
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<GetRifaDTO>>> Get()
         {
@@ -55,6 +57,7 @@ namespace WebApiCasino.Controllers
             return mapper.Map<List<GetRifaDTO>>(rifas);
         }
 
+        //Obtiene las rifas dandole el "id"
         [HttpGet("{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<RifaDTO>> GetById(int id)
@@ -67,7 +70,7 @@ namespace WebApiCasino.Controllers
             }
             return mapper.Map<RifaDTO>(aux);
         }
-
+        //Obtiene los premios de la rifa proporcionada por un "id"
         [HttpGet("{id:int}/premios")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<PremioDTO>> GetPremios()
@@ -81,6 +84,7 @@ namespace WebApiCasino.Controllers
             return Ok(premioAux);
         }
 
+        //Obtiene los boletos disponibles de una rifa proporcionada dado su "Id"
         [HttpGet("{id:int}/boletos-disponibles")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<Carta>>> GetBoletosDisponibles(int id)
@@ -181,9 +185,6 @@ namespace WebApiCasino.Controllers
             await dbContext.SaveChangesAsync();
             return Ok();
         }
-
-        //Hacer cambio a get con las variables con int y string
-        //{id:int} {nombre}
         [HttpPost("search")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Rifa>> Search([FromBody] BuscarRifaDTO buscarRifaDTO)
@@ -199,10 +200,6 @@ namespace WebApiCasino.Controllers
             }
             return aux;
         }
-
-
-        //Hacer cambio a get con las variables con int y string
-        //{id:int} {nombre}
         [HttpPost("registrar-participante")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante([FromBody] RifaDTOParticipante rifaDTOParticipante)
@@ -256,20 +253,19 @@ namespace WebApiCasino.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPatch("json-patch/{id:int}")]
-        public async Task<ActionResult<RifasDtoPatch>> Patch(int id, [FromBody] RifasDtoPatch rifasAux)
+        [HttpPatch("JsonPatch/{id:int}")]
+        public async Task<ActionResult<RifasDtoPatch>> Patch(int id, JsonPatchDocument<Rifa> rifasAux)
         {
             var rifas = await dbContext.Rifas.FirstOrDefaultAsync(a => a.Id == id);
             //  [{"op":"replace", "path": "Nombre", "value": "test"}]
-            
             if (rifas == null)
             {
                 return NotFound();
             }
-            //rifasAux.ApplyTo(rifas);
+            rifasAux.ApplyTo(rifas);
             await dbContext.SaveChangesAsync();
             return Ok(rifas);
         }
-        
+
     }
 }

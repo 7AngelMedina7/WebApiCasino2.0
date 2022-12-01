@@ -9,10 +9,5 @@ namespace WebApiCasino.DTOs
         public int Id { get; set; }
 
         public string Nombre { get; set; }
-        
-
-        //public List<PremioDTO> Premios { get; set; }
-        //public List<RifaParticipante> RifaParticipantes { get; set; }
-        //public List <Usu> Participantes { get; set; }
     }
 }

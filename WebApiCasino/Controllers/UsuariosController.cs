@@ -58,7 +58,6 @@ namespace WebApiCasino.Controllers
 
             if (result.Succeeded)
             {
-                //Se retorna el Jwt (Json Web Token) especifica el formato del token que hay que devolverle a los clientes
                 return await ConstruirToken(data);
             }
             else
@@ -81,23 +80,7 @@ namespace WebApiCasino.Controllers
                 return await ConstruirToken(user);
             }
         }
-        //[HttpPost("{id:int}/eliminar-participante")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-        //public async Task<IActionResult> EliminarParticipante(int id, [FromBody] RifaDTO objRifa)
-        //{
-        //    var existe = await dbContext.RifaParticipantes.AnyAsync(a => a.RifaRefId == id && (a.ParticipanteRefId = objRifa.Id));
-        //    if (!existe)
-        //    {
-        //        return NotFound("El recurso no fue encontrado");
-        //    }
-        //    dbContext.RifaParticipantes.Remove(new RifaParticipante()
-        //    {
-        //        ParticipanteRefId = objRifa.Id,
-        //        RifaRefId = id
-        //    });
-        //    await dbContext.SaveChangesAsync();
-        //    return Ok();
-        //}
+       
         private async Task<ActionResult<DatosAutenticacion>> ConstruirToken(IdentityUser usuario)
         {
             var claims = new List<Claim>
@@ -106,8 +89,6 @@ namespace WebApiCasino.Controllers
                 new Claim("UserEmail", usuario.Email),
                 new Claim("UserName", usuario.UserName),
                 };
-
-
             var claimsDB = await userManager.GetClaimsAsync(usuario);
 
             claims.AddRange(claimsDB);
