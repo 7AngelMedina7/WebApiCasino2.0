@@ -19,6 +19,7 @@ namespace WebApiCasino.Controllers
         private readonly ILogger<RifasController> logger; 
         public RifasController(ApplicationDbContext dbContext, IMapper mapper,ILogger<RifasController>logger)
         {
+            //Inyeccion de dependencias
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.logger = logger;
@@ -94,6 +95,7 @@ namespace WebApiCasino.Controllers
             return boletosDisponibles;
         }
 
+        //Obtener ganadores dada el "id" de la rifa
         [HttpGet("{id:int}/obtener-ganador")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<AddRifaDTO>> GetObtenerGanador(int id)
@@ -132,7 +134,7 @@ namespace WebApiCasino.Controllers
 
             return new AddRifaDTO() { message = $"El boleto ganador es: {boletoGanador.CartaRefId}", data = boletoGanador };
         }
-
+        //Borrar rifa dado su "id"
         [HttpDelete("{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<GetRifaDTO>> Delete(int id)
@@ -150,6 +152,7 @@ namespace WebApiCasino.Controllers
             return Ok();
         }
 
+        //Hacer una modificacion con Patch dado su "id"
         [HttpPatch("{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<GetRifaDTO>> Patch(int id, [FromBody] RifaDTO objRifa)
@@ -168,6 +171,7 @@ namespace WebApiCasino.Controllers
             return Ok();
         }
 
+        //Hacer una modificacion con Put dado su "id"
         [HttpPut("{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<IActionResult> Put(int id, [FromBody] RifaDTO objRifa)
@@ -185,6 +189,7 @@ namespace WebApiCasino.Controllers
             await dbContext.SaveChangesAsync();
             return Ok();
         }
+        //Hacer una busqueda dandole como Post el "nombre" de la rifa o el "id" de la rifa
         [HttpPost("search")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Rifa>> Search([FromBody] BuscarRifaDTO buscarRifaDTO)
@@ -200,6 +205,7 @@ namespace WebApiCasino.Controllers
             }
             return aux;
         }
+        //Registrar participante en una rifa
         [HttpPost("registrar-participante")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante([FromBody] RifaDTOParticipante rifaDTOParticipante)
@@ -235,7 +241,7 @@ namespace WebApiCasino.Controllers
 
             return new AddRifaDTO() { message = "Participante registrado correctamente", data = rifaParticipante };
         }
-
+        //Borrar participante de una rifa dado el "id" de la rifa y el "id" del participante
         [HttpDelete("{IdRifa:int}/participante/{IdParticipante}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante(int IdRifa, String IdParticipante)
@@ -251,7 +257,7 @@ namespace WebApiCasino.Controllers
 
             return new AddRifaDTO() { message = "Participante eliminado correctamente"};
         }
-
+        //Uso del JsonPatch
         [AllowAnonymous]
         [HttpPatch("JsonPatch/{id:int}")]
         public async Task<ActionResult<RifasDtoPatch>> Patch(int id, JsonPatchDocument<Rifa> rifasAux)

@@ -12,7 +12,7 @@ namespace WebApiCasino.Validaciones
                 return new ValidationResult("Debe escribir un numero");
             }
             int valorAux = int.Parse(valor.ToString());
-            if (valorAux <= 0 || valorAux > 5)
+            if (valorAux <= 0 || valorAux > 54)
             {
                 return new ValidationResult("El numero escogido debe ser entre el 1 al 54");
             }

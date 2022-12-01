@@ -14,6 +14,7 @@ namespace WebApiCasino.Entidades
         public string Nombre { get; set; }
         public string Persona { get; set; }
 
+        //Validaciones dentro del modelo
         //Verificar numero de la carta
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

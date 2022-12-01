@@ -5,6 +5,10 @@ namespace WebApiCasino.Validaciones
 {
     public class ValidarNombres : ValidationAttribute
     {
+        //Valida que el nombre este bien escrito.
+            //1.- Verifica que sea mayor a 5 caracteres.
+            //2.- Que la primera letra sea mayuscula.
+            //3.- Que el nombre no sea tan largo.
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var primeraLetra = value.ToString()[0].ToString();

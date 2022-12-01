@@ -70,7 +70,7 @@ namespace WebApiCasino
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiExamen", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiCasino", Version = "v2.0" });
                 //Autenticaciones
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -97,9 +97,7 @@ namespace WebApiCasino
                 });
             });
 
-            //
-            // services.AddAutoMapper(typeof(StartUp));
-
+         
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -132,11 +130,7 @@ namespace WebApiCasino
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //endpoints.MapAreaControllerRoute(
-                //    name: "id",
-                //    areaName: "Nombre",
-                //     pattern: "{controller=Home}/{action=Index}/{id?}");
-                //endpoints.MapRazorPages();
+                
             });
         }
     }
