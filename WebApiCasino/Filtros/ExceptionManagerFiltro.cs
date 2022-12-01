@@ -21,10 +21,10 @@ namespace WebApiCasino.Filtros
         }
         public void OnException(ExceptionContext context)
         {
-            //if (context.Exception is Participante)
-            //{
-            //    context.Result = new JsonResult(" Error " + _hostingEviroment.ApplicationName + " la excepcion de tipo:" + context.Exception.GetType());
-            //}
+            if (context.Exception is Rifa)
+            {
+                context.Result = new JsonResult(" Error " + _hostingEviroment.ApplicationName + " la excepcion de tipo:" + context.Exception.GetType());
+            }
         }
     }
 }

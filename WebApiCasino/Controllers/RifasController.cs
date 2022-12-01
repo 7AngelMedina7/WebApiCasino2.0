@@ -266,6 +266,8 @@ namespace WebApiCasino.Controllers
             await dbContext.SaveChangesAsync();
             return Ok(rifas);
         }
-
+       
+        
     }
 }
+   

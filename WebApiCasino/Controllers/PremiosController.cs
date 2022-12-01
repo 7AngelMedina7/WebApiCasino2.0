@@ -34,7 +34,7 @@ namespace WebApiCasino.Controllers
             return premioAux;
         }
 
-        [HttpPost]
+        [HttpPost] //
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<AddRifaDTO>> Patch(int id, [FromBody] PremioDTO premioDTO)
         {
