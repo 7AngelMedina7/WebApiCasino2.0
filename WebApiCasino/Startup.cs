@@ -70,7 +70,7 @@ namespace WebApiCasino
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiCasino", Version = "v2.0" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PIA-Web-Api-Casino", Version = "v2.3" });
                 //Autenticaciones
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

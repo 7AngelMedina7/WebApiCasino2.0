@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using WebApiCasino.DTOs;
 using WebApiCasino.Entidades;
 
@@ -73,7 +74,7 @@ namespace WebApiCasino.Controllers
         //Obtiene los premios de la rifa proporcionada por un "id"
         [HttpGet("{id:int}/premios")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<GetPremioDTO>> GetPremios(int id)
+        public async Task<ActionResult<List<GetPremioDTO>>> GetPremios(int id)
         {
             var aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == id);
             if (aux == null)
@@ -87,7 +88,7 @@ namespace WebApiCasino.Controllers
                 logger.LogError($"El premio con el Id: {id} no ha sido encontrado");
                 return NotFound($"El premio con el Id: {id} no ha sido encontrado");
             }
-            GetPremioDTO premioAux = mapper.Map<GetPremioDTO>(verificarPremios);
+            List <GetPremioDTO> premioAux = mapper.Map<List<GetPremioDTO>>(verificarPremios);
             return Ok(premioAux);
         }
 
@@ -183,6 +184,43 @@ namespace WebApiCasino.Controllers
             return Ok();
         }
 
+        [HttpPost("registrar-participante")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante([FromBody] RifaDTOParticipante rifaDTOParticipante)
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var roleUser = currentUser.HasClaim(c => c.Type == "EsAdmin");
+            var userId = "";
+            //se busca cual es el user y el rol que tiene
+            if (roleUser == false)
+            {
+                userId = currentUser.FindFirst(c => c.Type == "UserId").Value;
+            }
+            else
+            {
+                userId = rifaDTOParticipante.ParticipanteId;
+            }
+            var veifircarNombreRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.ParticipanteRefId == userId && x.RifaRefId == rifaDTOParticipante.RifaId);
+            if (veifircarNombreRifa)
+            {
+                return BadRequest("El participante ya se encuentra registrado en la rifa.");
+            }
+            var veifircarCartaRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.CartaRefId == rifaDTOParticipante.CartaId && x.RifaRefId == rifaDTOParticipante.RifaId);
+            if (veifircarCartaRifa)
+            {
+                return BadRequest("El boleto ya se encuentra registrado en la rifa.");
+            }
+            rifaDTOParticipante.ParticipanteId = userId;
+            //cuando este registrado aparecera un mensaje de "Participante Resgistrado correctamente"
+
+            RifaParticipante rifaParticipanteAux = mapper.Map<RifaParticipante>(rifaDTOParticipante);
+            dbContext.Add(rifaParticipanteAux);
+            await dbContext.SaveChangesAsync();
+
+            var rifaParticipante = await dbContext.RifaParticipantes.FirstOrDefaultAsync(x => x.ParticipanteRefId == rifaDTOParticipante.ParticipanteId && x.RifaRefId == rifaDTOParticipante.RifaId);
+
+            return new AddRifaDTO() { message = "Participante registrado correctamente", data = rifaParticipante };
+        }
         //Hacer una modificacion con Put dado su "id"
         [HttpPut("{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
@@ -230,43 +268,6 @@ namespace WebApiCasino.Controllers
             return NotFound("No existe esa rifa");
         }
         //Registrar participante en una rifa
-        [HttpPost("registrar-participante")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<AddRifaDTO>> RegistrarParticipante([FromBody] RifaDTOParticipante rifaDTOParticipante)
-        {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var roleUser = currentUser.HasClaim(c => c.Type == "EsAdmin");
-            var userId = "";
-            //se busca cual es el user y el rol que tiene
-            if (roleUser == false)
-            {
-                userId = currentUser.FindFirst(c => c.Type == "UserId").Value;
-            }
-            else
-            {
-                userId = rifaDTOParticipante.ParticipanteId;
-            }
-            var veifircarNombreRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.ParticipanteRefId == userId && x.RifaRefId == rifaDTOParticipante.RifaId);
-            if (veifircarNombreRifa)
-            {
-                return BadRequest("El participante ya se encuentra registrado en la rifa.");
-            }
-            var veifircarCartaRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.CartaRefId == rifaDTOParticipante.CartaId && x.RifaRefId == rifaDTOParticipante.RifaId);
-            if (veifircarCartaRifa)
-            {
-                return BadRequest("El boleto ya se encuentra registrado en la rifa.");
-            }
-            rifaDTOParticipante.ParticipanteId = userId;
-            //cuando este registrado aparecera un mensaje de "Participante Resgistrado correctamente"
-
-            RifaParticipante rifaParticipanteAux = mapper.Map<RifaParticipante>(rifaDTOParticipante);
-            dbContext.Add(rifaParticipanteAux);
-            await dbContext.SaveChangesAsync();
-
-            var rifaParticipante = await dbContext.RifaParticipantes.FirstOrDefaultAsync(x => x.ParticipanteRefId == rifaDTOParticipante.ParticipanteId && x.RifaRefId == rifaDTOParticipante.RifaId);
-
-            return new AddRifaDTO() { message = "Participante registrado correctamente", data = rifaParticipante };
-        }
         //Borrar participante de una rifa dado el "id" de la rifa y el "id" del participante
         [HttpDelete("{IdRifa:int}/participante/{IdParticipante}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
