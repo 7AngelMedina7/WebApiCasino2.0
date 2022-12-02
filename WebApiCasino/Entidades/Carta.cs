@@ -12,7 +12,6 @@ namespace WebApiCasino.Entidades
         public int Id { get; set; }
         public int CartaId { get; set; }
         public string Nombre { get; set; }
-        public string Persona { get; set; }
 
         //Validaciones dentro del modelo
         //Verificar numero de la carta

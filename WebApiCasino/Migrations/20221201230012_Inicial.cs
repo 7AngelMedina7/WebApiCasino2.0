@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApiCasino.Migrations
 {
-    public partial class init : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,8 +55,7 @@ namespace WebApiCasino.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CartaId = table.Column<int>(type: "int", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Persona = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -272,70 +271,70 @@ namespace WebApiCasino.Migrations
 
             migrationBuilder.InsertData(
                 table: "Cartas",
-                columns: new[] { "Id", "CartaId", "Nombre", "Persona" },
+                columns: new[] { "Id", "CartaId", "Nombre" },
                 values: new object[,]
                 {
-                    { 1, 1, "El Gallo ", "" },
-                    { 2, 2, "El Diablo ", "" },
-                    { 3, 3, "La Dama ", "" },
-                    { 4, 4, "El Catrin ", "" },
-                    { 5, 5, "El Paraguas ", "" },
-                    { 6, 6, "La Sirena ", "" },
-                    { 7, 7, "La Escalera ", "" },
-                    { 8, 8, "La Botella ", "" },
-                    { 9, 9, "El Barril ", "" },
-                    { 10, 10, "El Arbol ", "" },
-                    { 11, 11, "El Melon ", "" },
-                    { 12, 12, "El Valiente ", "" },
-                    { 13, 13, "El Gorrito ", "" },
-                    { 14, 14, "La Muerte ", "" },
-                    { 15, 15, "La Pera ", "" },
-                    { 16, 16, "La Bandera ", "" },
-                    { 17, 17, "El Bandolon ", "" },
-                    { 18, 18, "El Violoncello ", "" },
-                    { 19, 19, "La Garza ", "" },
-                    { 20, 20, "El Pajaro ", "" },
-                    { 21, 21, "La Mano ", "" },
-                    { 22, 22, "La Bota ", "" },
-                    { 23, 23, "La Luna ", "" },
-                    { 24, 24, "El Cotorro ", "" },
-                    { 25, 25, "El Borracho ", "" },
-                    { 26, 26, "El Negrito ", "" },
-                    { 27, 27, "El Corazon ", "" },
-                    { 28, 28, "La Sandia ", "" },
-                    { 29, 29, "El Tambor ", "" },
-                    { 30, 30, "El Camaron ", "" },
-                    { 31, 31, "Las Jaras ", "" },
-                    { 32, 32, "El Musico ", "" },
-                    { 33, 33, "La Araña ", "" },
-                    { 34, 34, "El Soldado ", "" },
-                    { 35, 35, "La Estrella ", "" },
-                    { 36, 36, "El Cazo ", "" },
-                    { 37, 37, "El Mundo ", "" },
-                    { 38, 38, "El Apache ", "" },
-                    { 39, 39, "El Nopal ", "" },
-                    { 40, 40, "El Alacran ", "" },
-                    { 41, 41, "La Rosa", "" },
-                    { 42, 42, "La Calavera ", "" }
+                    { 1, 1, "El Gallo " },
+                    { 2, 2, "El Diablo " },
+                    { 3, 3, "La Dama " },
+                    { 4, 4, "El Catrin " },
+                    { 5, 5, "El Paraguas " },
+                    { 6, 6, "La Sirena " },
+                    { 7, 7, "La Escalera " },
+                    { 8, 8, "La Botella " },
+                    { 9, 9, "El Barril " },
+                    { 10, 10, "El Arbol " },
+                    { 11, 11, "El Melon " },
+                    { 12, 12, "El Valiente " },
+                    { 13, 13, "El Gorrito " },
+                    { 14, 14, "La Muerte " },
+                    { 15, 15, "La Pera " },
+                    { 16, 16, "La Bandera " },
+                    { 17, 17, "El Bandolon " },
+                    { 18, 18, "El Violoncello " },
+                    { 19, 19, "La Garza " },
+                    { 20, 20, "El Pajaro " },
+                    { 21, 21, "La Mano " },
+                    { 22, 22, "La Bota " },
+                    { 23, 23, "La Luna " },
+                    { 24, 24, "El Cotorro " },
+                    { 25, 25, "El Borracho " },
+                    { 26, 26, "El Negrito " },
+                    { 27, 27, "El Corazon " },
+                    { 28, 28, "La Sandia " },
+                    { 29, 29, "El Tambor " },
+                    { 30, 30, "El Camaron " },
+                    { 31, 31, "Las Jaras " },
+                    { 32, 32, "El Musico " },
+                    { 33, 33, "La Araña " },
+                    { 34, 34, "El Soldado " },
+                    { 35, 35, "La Estrella " },
+                    { 36, 36, "El Cazo " },
+                    { 37, 37, "El Mundo " },
+                    { 38, 38, "El Apache " },
+                    { 39, 39, "El Nopal " },
+                    { 40, 40, "El Alacran " },
+                    { 41, 41, "La Rosa " },
+                    { 42, 42, "La Calavera " }
                 });
 
             migrationBuilder.InsertData(
                 table: "Cartas",
-                columns: new[] { "Id", "CartaId", "Nombre", "Persona" },
+                columns: new[] { "Id", "CartaId", "Nombre" },
                 values: new object[,]
                 {
-                    { 43, 43, "La Campana ", "" },
-                    { 44, 44, "El Cantarito ", "" },
-                    { 45, 45, "El Venado ", "" },
-                    { 46, 46, "El Sol ", "" },
-                    { 47, 47, "La Corona ", "" },
-                    { 48, 48, "La Chalupa ", "" },
-                    { 49, 49, "El Pino ", "" },
-                    { 50, 50, "El Pescado ", "" },
-                    { 51, 51, "La Palma ", "" },
-                    { 52, 52, "La Maceta ", "" },
-                    { 53, 53, "El Arpa ", "" },
-                    { 54, 54, "La Rana ", "" }
+                    { 43, 43, "La Campana " },
+                    { 44, 44, "El Cantarito " },
+                    { 45, 45, "El Venado " },
+                    { 46, 46, "El Sol " },
+                    { 47, 47, "La Corona " },
+                    { 48, 48, "La Chalupa " },
+                    { 49, 49, "El Pino " },
+                    { 50, 50, "El Pescado " },
+                    { 51, 51, "La Palma " },
+                    { 52, 52, "La Maceta " },
+                    { 53, 53, "El Arpa " },
+                    { 54, 54, "La Rana " }
                 });
 
             migrationBuilder.CreateIndex(

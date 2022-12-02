@@ -12,8 +12,8 @@ using WebApiCasino;
 namespace WebApiCasino.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221201104728_init")]
-    partial class init
+    [Migration("20221201230012_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -236,9 +236,6 @@ namespace WebApiCasino.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Persona")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Cartas");
@@ -248,379 +245,325 @@ namespace WebApiCasino.Migrations
                         {
                             Id = 1,
                             CartaId = 1,
-                            Nombre = "El Gallo ",
-                            Persona = ""
+                            Nombre = "El Gallo "
                         },
                         new
                         {
                             Id = 2,
                             CartaId = 2,
-                            Nombre = "El Diablo ",
-                            Persona = ""
+                            Nombre = "El Diablo "
                         },
                         new
                         {
                             Id = 3,
                             CartaId = 3,
-                            Nombre = "La Dama ",
-                            Persona = ""
+                            Nombre = "La Dama "
                         },
                         new
                         {
                             Id = 4,
                             CartaId = 4,
-                            Nombre = "El Catrin ",
-                            Persona = ""
+                            Nombre = "El Catrin "
                         },
                         new
                         {
                             Id = 5,
                             CartaId = 5,
-                            Nombre = "El Paraguas ",
-                            Persona = ""
+                            Nombre = "El Paraguas "
                         },
                         new
                         {
                             Id = 6,
                             CartaId = 6,
-                            Nombre = "La Sirena ",
-                            Persona = ""
+                            Nombre = "La Sirena "
                         },
                         new
                         {
                             Id = 7,
                             CartaId = 7,
-                            Nombre = "La Escalera ",
-                            Persona = ""
+                            Nombre = "La Escalera "
                         },
                         new
                         {
                             Id = 8,
                             CartaId = 8,
-                            Nombre = "La Botella ",
-                            Persona = ""
+                            Nombre = "La Botella "
                         },
                         new
                         {
                             Id = 9,
                             CartaId = 9,
-                            Nombre = "El Barril ",
-                            Persona = ""
+                            Nombre = "El Barril "
                         },
                         new
                         {
                             Id = 10,
                             CartaId = 10,
-                            Nombre = "El Arbol ",
-                            Persona = ""
+                            Nombre = "El Arbol "
                         },
                         new
                         {
                             Id = 11,
                             CartaId = 11,
-                            Nombre = "El Melon ",
-                            Persona = ""
+                            Nombre = "El Melon "
                         },
                         new
                         {
                             Id = 12,
                             CartaId = 12,
-                            Nombre = "El Valiente ",
-                            Persona = ""
+                            Nombre = "El Valiente "
                         },
                         new
                         {
                             Id = 13,
                             CartaId = 13,
-                            Nombre = "El Gorrito ",
-                            Persona = ""
+                            Nombre = "El Gorrito "
                         },
                         new
                         {
                             Id = 14,
                             CartaId = 14,
-                            Nombre = "La Muerte ",
-                            Persona = ""
+                            Nombre = "La Muerte "
                         },
                         new
                         {
                             Id = 15,
                             CartaId = 15,
-                            Nombre = "La Pera ",
-                            Persona = ""
+                            Nombre = "La Pera "
                         },
                         new
                         {
                             Id = 16,
                             CartaId = 16,
-                            Nombre = "La Bandera ",
-                            Persona = ""
+                            Nombre = "La Bandera "
                         },
                         new
                         {
                             Id = 17,
                             CartaId = 17,
-                            Nombre = "El Bandolon ",
-                            Persona = ""
+                            Nombre = "El Bandolon "
                         },
                         new
                         {
                             Id = 18,
                             CartaId = 18,
-                            Nombre = "El Violoncello ",
-                            Persona = ""
+                            Nombre = "El Violoncello "
                         },
                         new
                         {
                             Id = 19,
                             CartaId = 19,
-                            Nombre = "La Garza ",
-                            Persona = ""
+                            Nombre = "La Garza "
                         },
                         new
                         {
                             Id = 20,
                             CartaId = 20,
-                            Nombre = "El Pajaro ",
-                            Persona = ""
+                            Nombre = "El Pajaro "
                         },
                         new
                         {
                             Id = 21,
                             CartaId = 21,
-                            Nombre = "La Mano ",
-                            Persona = ""
+                            Nombre = "La Mano "
                         },
                         new
                         {
                             Id = 22,
                             CartaId = 22,
-                            Nombre = "La Bota ",
-                            Persona = ""
+                            Nombre = "La Bota "
                         },
                         new
                         {
                             Id = 23,
                             CartaId = 23,
-                            Nombre = "La Luna ",
-                            Persona = ""
+                            Nombre = "La Luna "
                         },
                         new
                         {
                             Id = 24,
                             CartaId = 24,
-                            Nombre = "El Cotorro ",
-                            Persona = ""
+                            Nombre = "El Cotorro "
                         },
                         new
                         {
                             Id = 25,
                             CartaId = 25,
-                            Nombre = "El Borracho ",
-                            Persona = ""
+                            Nombre = "El Borracho "
                         },
                         new
                         {
                             Id = 26,
                             CartaId = 26,
-                            Nombre = "El Negrito ",
-                            Persona = ""
+                            Nombre = "El Negrito "
                         },
                         new
                         {
                             Id = 27,
                             CartaId = 27,
-                            Nombre = "El Corazon ",
-                            Persona = ""
+                            Nombre = "El Corazon "
                         },
                         new
                         {
                             Id = 28,
                             CartaId = 28,
-                            Nombre = "La Sandia ",
-                            Persona = ""
+                            Nombre = "La Sandia "
                         },
                         new
                         {
                             Id = 29,
                             CartaId = 29,
-                            Nombre = "El Tambor ",
-                            Persona = ""
+                            Nombre = "El Tambor "
                         },
                         new
                         {
                             Id = 30,
                             CartaId = 30,
-                            Nombre = "El Camaron ",
-                            Persona = ""
+                            Nombre = "El Camaron "
                         },
                         new
                         {
                             Id = 31,
                             CartaId = 31,
-                            Nombre = "Las Jaras ",
-                            Persona = ""
+                            Nombre = "Las Jaras "
                         },
                         new
                         {
                             Id = 32,
                             CartaId = 32,
-                            Nombre = "El Musico ",
-                            Persona = ""
+                            Nombre = "El Musico "
                         },
                         new
                         {
                             Id = 33,
                             CartaId = 33,
-                            Nombre = "La Araña ",
-                            Persona = ""
+                            Nombre = "La Araña "
                         },
                         new
                         {
                             Id = 34,
                             CartaId = 34,
-                            Nombre = "El Soldado ",
-                            Persona = ""
+                            Nombre = "El Soldado "
                         },
                         new
                         {
                             Id = 35,
                             CartaId = 35,
-                            Nombre = "La Estrella ",
-                            Persona = ""
+                            Nombre = "La Estrella "
                         },
                         new
                         {
                             Id = 36,
                             CartaId = 36,
-                            Nombre = "El Cazo ",
-                            Persona = ""
+                            Nombre = "El Cazo "
                         },
                         new
                         {
                             Id = 37,
                             CartaId = 37,
-                            Nombre = "El Mundo ",
-                            Persona = ""
+                            Nombre = "El Mundo "
                         },
                         new
                         {
                             Id = 38,
                             CartaId = 38,
-                            Nombre = "El Apache ",
-                            Persona = ""
+                            Nombre = "El Apache "
                         },
                         new
                         {
                             Id = 39,
                             CartaId = 39,
-                            Nombre = "El Nopal ",
-                            Persona = ""
+                            Nombre = "El Nopal "
                         },
                         new
                         {
                             Id = 40,
                             CartaId = 40,
-                            Nombre = "El Alacran ",
-                            Persona = ""
+                            Nombre = "El Alacran "
                         },
                         new
                         {
                             Id = 41,
                             CartaId = 41,
-                            Nombre = "La Rosa",
-                            Persona = ""
+                            Nombre = "La Rosa "
                         },
                         new
                         {
                             Id = 42,
                             CartaId = 42,
-                            Nombre = "La Calavera ",
-                            Persona = ""
+                            Nombre = "La Calavera "
                         },
                         new
                         {
                             Id = 43,
                             CartaId = 43,
-                            Nombre = "La Campana ",
-                            Persona = ""
+                            Nombre = "La Campana "
                         },
                         new
                         {
                             Id = 44,
                             CartaId = 44,
-                            Nombre = "El Cantarito ",
-                            Persona = ""
+                            Nombre = "El Cantarito "
                         },
                         new
                         {
                             Id = 45,
                             CartaId = 45,
-                            Nombre = "El Venado ",
-                            Persona = ""
+                            Nombre = "El Venado "
                         },
                         new
                         {
                             Id = 46,
                             CartaId = 46,
-                            Nombre = "El Sol ",
-                            Persona = ""
+                            Nombre = "El Sol "
                         },
                         new
                         {
                             Id = 47,
                             CartaId = 47,
-                            Nombre = "La Corona ",
-                            Persona = ""
+                            Nombre = "La Corona "
                         },
                         new
                         {
                             Id = 48,
                             CartaId = 48,
-                            Nombre = "La Chalupa ",
-                            Persona = ""
+                            Nombre = "La Chalupa "
                         },
                         new
                         {
                             Id = 49,
                             CartaId = 49,
-                            Nombre = "El Pino ",
-                            Persona = ""
+                            Nombre = "El Pino "
                         },
                         new
                         {
                             Id = 50,
                             CartaId = 50,
-                            Nombre = "El Pescado ",
-                            Persona = ""
+                            Nombre = "El Pescado "
                         },
                         new
                         {
                             Id = 51,
                             CartaId = 51,
-                            Nombre = "La Palma ",
-                            Persona = ""
+                            Nombre = "La Palma "
                         },
                         new
                         {
                             Id = 52,
                             CartaId = 52,
-                            Nombre = "La Maceta ",
-                            Persona = ""
+                            Nombre = "La Maceta "
                         },
                         new
                         {
                             Id = 53,
                             CartaId = 53,
-                            Nombre = "El Arpa ",
-                            Persona = ""
+                            Nombre = "El Arpa "
                         },
                         new
                         {
                             Id = 54,
                             CartaId = 54,
-                            Nombre = "La Rana ",
-                            Persona = ""
+                            Nombre = "La Rana "
                         });
                 });
 

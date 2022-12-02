@@ -7,7 +7,7 @@ namespace WebApiCasino.DTOs
     {
         [ValidarMayorACero]
         public int Id { get; set; }
-        [ValidarNombres]
+        //[ValidarNombres]
 
         public string Nombre { get; set; }
     }

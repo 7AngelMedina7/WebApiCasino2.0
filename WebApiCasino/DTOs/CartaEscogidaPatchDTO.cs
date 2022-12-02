@@ -9,7 +9,7 @@ namespace WebApiCasino.DTOs
         [Required(ErrorMessage = "Escoger una carta es obligatorio")]
         public int CartaEscogida { get; set; }
 
-
+        //Validar que el numero escogido este entre el 1 y el 54
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (CartaEscogida != null)

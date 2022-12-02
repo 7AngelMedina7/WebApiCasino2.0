@@ -8,9 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebApiCasino.DTOs;
 using WebApiCasino.DTOs.Autenticacion;
-using WebApiCasino.Entidades;
 
 namespace WebApiCasino.Controllers
 {
@@ -23,20 +21,18 @@ namespace WebApiCasino.Controllers
         private readonly UserManager<IdentityUser> userManager;
         readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
-        private readonly IMapper mapper;
         public ApplicationDbContext dbContext { get; }
 
-        public UsuariosController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbContext, IMapper mapper)
+        public UsuariosController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbContext)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
-            this.mapper = mapper;
             this.dbContext = dbContext;
         }
         
         [AllowAnonymous]
-        [HttpPost("registrar")]
+        [HttpPost("registrar")] //Se hace un registro ya sea para admin o participante 
         public async Task<ActionResult<DatosAutenticacion>> Registrar(RegistroDTO registroDTO)
         {
             var user = new IdentityUser { UserName = registroDTO.Email, Email = registroDTO.Email };
@@ -50,12 +46,12 @@ namespace WebApiCasino.Controllers
                 {
                     await userManager.AddClaimAsync(data, new Claim("EsAdmin", "1"));
                 }
-                else
+                else if(registroDTO.IsAdmin == 0)
                 {
                     await userManager.AddClaimAsync(data, new Claim("EsParticipante", "1"));
                 }
             }
-
+            //se construye un token para validar el inicio de sesion 
             if (result.Succeeded)
             {
                 return await ConstruirToken(data);
@@ -67,7 +63,7 @@ namespace WebApiCasino.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("login")]//El usuario o el admin pueden iniciar sesion con su token 
         public async Task<ActionResult<DatosAutenticacion>> LoginDTO(LoginDTO loginDTO)
         {
             var user = await userManager.FindByNameAsync(loginDTO.Email);

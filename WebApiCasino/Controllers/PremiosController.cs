@@ -23,20 +23,15 @@ namespace WebApiCasino.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-        public async Task<ActionResult<PremioDTO>> Get()
+        public async Task<ActionResult<List<GetPremioDTO>>> Get()
         {
-            var verificarPremios =  dbContext.Premios.Where(db => db.Recompensa != string.Empty);
-            if (verificarPremios == null)
-            {
-                return NotFound();
-            }
-            PremioDTO premioAux = mapper.Map<PremioDTO>(verificarPremios);
-            return premioAux;
+            var verificarPremios = await dbContext.Premios.ToListAsync();
+            return mapper.Map<List<GetPremioDTO>>(verificarPremios);
         }
 
-        [HttpPost] //
+        [HttpPost] 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-        public async Task<ActionResult<AddRifaDTO>> Patch(int id, [FromBody] PremioDTO premioDTO)
+        public async Task<ActionResult<AddRifaDTO>> Patch( [FromBody] PremioDTO premioDTO)
         {
             var existe = await dbContext.Premios.AnyAsync(a => a.Lugar == premioDTO.Lugar && a.RifaRefId == premioDTO.RifaId);
             if (existe)

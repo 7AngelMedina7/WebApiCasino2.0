@@ -15,9 +15,11 @@ namespace WebApiCasino.Controllers
             this.dbContext = dbContext;
         }
         public ApplicationDbContext dbContext { get; }
+
+        //Obtener Todas las cartas.
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-        public async Task<ActionResult<List<Carta>>> Get(Carta carta)
+        public async Task<ActionResult<List<Carta>>> Get()
         {
             var cartas = dbContext.Cartas.ToList();
             return cartas;

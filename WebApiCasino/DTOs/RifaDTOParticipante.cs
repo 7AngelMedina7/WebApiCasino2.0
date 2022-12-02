@@ -9,7 +9,7 @@ namespace WebApiCasino.DTOs
         [Required(ErrorMessage = "El Id de Rifa es obligatorio")]
         public int RifaId { get; set; }
 
-        [Required(ErrorMessage = "El Usuario es obligatorio")]
+        //[Required(ErrorMessage = "El Usuario es obligatorio")]
         public string ParticipanteId { get; set; }
 
         [Required(ErrorMessage = "La carta es obligatoria")]

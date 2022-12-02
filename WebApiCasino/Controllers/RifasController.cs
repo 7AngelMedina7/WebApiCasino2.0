@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 using WebApiCasino.DTOs;
 using WebApiCasino.Entidades;
 
@@ -31,18 +30,18 @@ namespace WebApiCasino.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult<AddRifaDTO>> Post([FromBody] RifaDTO obj)
         {
-            //Verifica si el nombre de la risa ya existe en la base de batos
+            //Verifica si el nombre de la rifa ya existe en la base de batos
             var veifircarNombreRifa = await dbContext.Rifas.AnyAsync(x => x.Nombre == obj.Nombre);
             if (veifircarNombreRifa)
             {
+                
                 return BadRequest($"Ya existe el nombre {obj.Nombre}");
             }
             var rifaAux = mapper.Map<Rifa>(obj);
             dbContext.Add(rifaAux);
             await dbContext.SaveChangesAsync();
-
+            //Busca la rifa para avisar cual es su id
             var aux = await dbContext.Rifas.FirstOrDefaultAsync(x => x.Nombre == obj.Nombre);
-
             AddRifaDTO addRifa = new AddRifaDTO() { message = $"El Id de la Rifa es: {rifaAux.Id}", data = mapper.Map<GetRifaDTO>(aux) };
             return Ok(addRifa);
         }
@@ -66,22 +65,29 @@ namespace WebApiCasino.Controllers
             var aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == id);
             if (aux == null)
             {
-                logger.LogWarning($"La Rifa con el Id: {id} no ha sido encontrado");
-                return NotFound();
+                logger.LogError($"La Rifa con el Id: {id} no ha sido encontrado");
+                return NotFound($"La Rifa con el Id: {id} no ha sido encontrado");
             }
             return mapper.Map<RifaDTO>(aux);
         }
         //Obtiene los premios de la rifa proporcionada por un "id"
         [HttpGet("{id:int}/premios")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<PremioDTO>> GetPremios()
+        public async Task<ActionResult<GetPremioDTO>> GetPremios(int id)
         {
-            var verificarPremios = dbContext.Premios.Where(db => db.Recompensa != string.Empty);
-            if (verificarPremios == null)
+            var aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == id);
+            if (aux == null)
             {
-                return NotFound();
+                logger.LogError($"La Rifa con el Id: {id} no ha sido encontrado");
+                return NotFound($"La Rifa con el Id: {id} no ha sido encontrado");
             }
-            PremioDTO premioAux = mapper.Map<PremioDTO>(verificarPremios);
+            var verificarPremios = await dbContext.Premios.Where(db => db.RifaRefId == id).ToListAsync();
+            if (verificarPremios.Count == 0)
+            {
+                logger.LogError($"El premio con el Id: {id} no ha sido encontrado");
+                return NotFound($"El premio con el Id: {id} no ha sido encontrado");
+            }
+            GetPremioDTO premioAux = mapper.Map<GetPremioDTO>(verificarPremios);
             return Ok(premioAux);
         }
 
@@ -91,7 +97,7 @@ namespace WebApiCasino.Controllers
         public async Task<ActionResult<List<Carta>>> GetBoletosDisponibles(int id)
         {
             List<Carta> boletosDisponibles = dbContext.Cartas.Where(x => !dbContext.RifaParticipantes.Any(p => p.CartaRefId == x.Id && p.RifaRefId == id)).ToList();
-
+            logger.LogInformation($"Obteniendo boletos del id: {id} ");
             return boletosDisponibles;
         }
 
@@ -103,26 +109,30 @@ namespace WebApiCasino.Controllers
             var premios = dbContext.Premios.Where(p => !dbContext.Ganadores.Any(g => g.PremioRefId == p.Id)).ToList();
             if (premios.Count == 0)
             {
-                return BadRequest("No hay premios por entregar, todos fueron asignados.");
+                logger.LogWarning($"No hay premios en la rifa {id}");
+                return BadRequest("No hay premios por entregar");
             }
             var participantes = dbContext.RifaParticipantes.Where(p => !dbContext.Ganadores.Any(g => g.ParticipanteRefId == p.ParticipanteRefId)).ToList();
             if (participantes.Count == 0)
             {
-                return BadRequest("No hay participantes para entregarles premios.");
+                logger.LogWarning($"No hay participantes en la rifa {id}");
+                return BadRequest("No hay participantes");
             }
             var premio = premios.Find(p => p.Lugar == premios.Max(premio => premio.Lugar));
-            var winner = false;
+            //Generar de manera random el boleto
+            var ganador = false;
             Random rand = new Random();
             RifaParticipante boletoGanador;
             do
-            {
+            {  
                 int number = rand.Next(1, 54);
+                //De manera aleatoria se selecciona un ganador 
                 boletoGanador = dbContext.RifaParticipantes.FirstOrDefault(db => db.RifaRefId == id && db.CartaRefId == number);
                 if (boletoGanador != null)
                 {
-                    winner = true;
+                    ganador = true;
                 }
-            } while (!winner);
+            } while (!ganador);
 
             dbContext.Add(new Ganadores()
             {
@@ -142,6 +152,7 @@ namespace WebApiCasino.Controllers
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
             if (!existe)
             {
+                logger.LogWarning($"La rifa con el Id {id} no fue encontrado");
                 return NotFound($"La rifa con el Id {id} no fue encontrado");
             }
             dbContext.Rifas.Remove(new Rifa()
@@ -160,6 +171,7 @@ namespace WebApiCasino.Controllers
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
             if (!existe)
             {
+                logger.LogWarning($"La rifa con el Id {id} no fue encontrado");
                 return NotFound($"La Rifa con el id: {id} no fue encontrado");
             }
             dbContext.Rifas.Update(new Rifa()
@@ -179,6 +191,7 @@ namespace WebApiCasino.Controllers
             var existe = await dbContext.Rifas.AnyAsync(a => a.Id == id);
             if (!existe)
             {
+                logger.LogWarning($"La rifa con el Id {id} no fue encontrado");
                 return NotFound($"La rifa con el Id {id} no fue encontrado");
             }
             dbContext.Rifas.Update(new Rifa()
@@ -192,18 +205,29 @@ namespace WebApiCasino.Controllers
         //Hacer una busqueda dandole como Post el "nombre" de la rifa o el "id" de la rifa
         [HttpPost("search")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<Rifa>> Search([FromBody] BuscarRifaDTO buscarRifaDTO)
+        public async Task<ActionResult<RifaDTO>> Search([FromBody] BuscarRifaDTO buscarRifaDTO)
         {
-            var aux = dbContext.Rifas.FirstOrDefault(db => db.Nombre == buscarRifaDTO.Nombre);
-            if (buscarRifaDTO.Id != 0)
-            {
-                aux = await dbContext.Rifas.FirstOrDefaultAsync(db => db.Id == buscarRifaDTO.Id);
+            if (buscarRifaDTO.Nombre != null) {
+
+                var aux = dbContext.Rifas.FirstOrDefault(db => db.Nombre == buscarRifaDTO.Nombre);
+                if (aux == null)
+                {
+                    return NotFound("No existe esa rifa");
+                }
+                RifaDTO rifaauxDto = mapper.Map<RifaDTO>(aux);
+                return rifaauxDto;
             }
-            else
+            else if (buscarRifaDTO.Id != 0)
             {
-                aux = dbContext.Rifas.FirstOrDefault(db => db.Nombre == buscarRifaDTO.Nombre);
+                var aux = dbContext.Rifas.FirstOrDefault(db => db.Id == buscarRifaDTO.Id);
+                if (aux == null)
+                {
+                    return NotFound("No existe esa rifa");
+                }
+                RifaDTO rifaauxDto = mapper.Map<RifaDTO>(aux);
+                return rifaauxDto;
             }
-            return aux;
+            return NotFound("No existe esa rifa");
         }
         //Registrar participante en una rifa
         [HttpPost("registrar-participante")]
@@ -213,6 +237,7 @@ namespace WebApiCasino.Controllers
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var roleUser = currentUser.HasClaim(c => c.Type == "EsAdmin");
             var userId = "";
+            //se busca cual es el user y el rol que tiene
             if (roleUser == false)
             {
                 userId = currentUser.FindFirst(c => c.Type == "UserId").Value;
@@ -232,6 +257,7 @@ namespace WebApiCasino.Controllers
                 return BadRequest("El boleto ya se encuentra registrado en la rifa.");
             }
             rifaDTOParticipante.ParticipanteId = userId;
+            //cuando este registrado aparecera un mensaje de "Participante Resgistrado correctamente"
 
             RifaParticipante rifaParticipanteAux = mapper.Map<RifaParticipante>(rifaDTOParticipante);
             dbContext.Add(rifaParticipanteAux);
@@ -249,13 +275,14 @@ namespace WebApiCasino.Controllers
             var veifircarNombreRifa = await dbContext.RifaParticipantes.AnyAsync(x => x.ParticipanteRefId == IdParticipante && x.RifaRefId == IdRifa);
             if (!veifircarNombreRifa)
             {
-                return BadRequest("El participante no se encuentra registrado en la rifa.");
+                logger.LogWarning($"El participante con el id {IdParticipante} no se encuentra registrado en la rifa.");
+                return BadRequest("El participante no se encuentra registrado en la rifa");
             }
 
             dbContext.RifaParticipantes.RemoveRange(dbContext.RifaParticipantes.Where(x => x.ParticipanteRefId == IdParticipante && x.RifaRefId == IdRifa));
             await dbContext.SaveChangesAsync();
-
-            return new AddRifaDTO() { message = "Participante eliminado correctamente"};
+            logger.LogInformation($"Participante con el id: {IdParticipante} fue eliminado");
+            return new AddRifaDTO() { message = "Participante eliminado"};
         }
         //Uso del JsonPatch
         [AllowAnonymous]
