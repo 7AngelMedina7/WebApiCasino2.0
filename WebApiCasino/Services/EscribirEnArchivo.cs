@@ -8,7 +8,7 @@ namespace WebApiCasino.Services
     {
         private readonly IWebHostEnvironment env;
 
-        private readonly string nombreArchivo = "Logg Information.txt";
+        private readonly string nombreArchivo = "Logger-Information.txt";
         // private readonly string archivo = "ListadoAlumnos.txt";
         private Timer timer;
 
